@@ -11,12 +11,12 @@
     + [Quantum Patch GAN](#qpatchagan)
     + [QC-GAN](#qcgan)
     + [PQWGAN](#PQWGAN)
-  * [Classical GANs](#classicgans)
+  * [Classical GANs](#Classicgans)
     + [GAN](#GAN)
     + [WGAN](#WGAN)
-  * [Quantum Denoising Diffusion Models](#qdeno)
+  * [Quantum Denoising Diffusion Models](#Qdeno)
     + [ Q-Dense and Q-Dense Directed](#qdense)
-  * [Classical Denoising Diffusion Models](#deno)
+  * [Classical Denoising Diffusion Models](#Deno)
     + [Denoising Diffusion Probabilistic architecture](#DDPM)
 
 
@@ -36,7 +36,7 @@ This project focuses on the use of biomedical images. To this end, two datasets 
 
 This dataset consists of 17,092 images of blood cells across eight different groups. The images were captured using a Blood Cell Microscope and underwent preprocessing to achieve a resolution of 3×28×28. This dataset was selected for its low-resolution biomedical images, which are well-suited for quantum generative models in the Noisy Intermediate-Scale Quantum (NISQ) era.
 
-To train the models with this dataset, you need to specify the path to the .npz file that contains the data. Additionally, for more information about the required parameters, run `python train.py --helpblood`
+To train the models with this dataset, you need to specify the path to the .npz file that contains the data. Additionally, for more information about the required parameters, run `python train.py --helpblood`.
 
 _References:_
 
@@ -48,7 +48,7 @@ _References:_
 
 This dataset contains 750 brain volumes with four types of MRI scans: Fluid-attenuated inversion recovery (FLAIR), T1, T1 with gadolinium contrast, and T2. Each volume is composed of 155 slices, each at a resolution of 240×240. This dataset was chosen for its more complex images, which are valuable for studying how models perform with higher-resolution data.
 
-To train the models with this dataset, specify the path to the folder containing the NIfTI files. For more information on the required parameters, run `python train.py --helpbrain`
+To train the models with this dataset, specify the path to the folder containing the NIfTI files. For more information on the required parameters, run `python train.py --helpbrain`.
 
 _References:_
 
@@ -64,7 +64,7 @@ _References:_
 
 The initial tests were conducted using the Quantum Patch GAN architecture proposed in [6]. This hybrid model employs a patch-based method, where the generator comprises multiple sub-generators, each implemented with parameterized quantum circuits (PQCs) and responsible for generating a specific portion of the image. The discriminator, is a classical fully connected neural network. This approach significantly reduces the number of qubits needed, enabling the model to handle higher-resolution images more effectively.
 
-The model code was sourced from [7] and adapted to the datasets. Additional modifications were made to integrate the model with this repository, including functions for saving and loading the model, as well as storing generated images. For more information on the required parameters, run `python train.py --helpPatchGAN`
+The model code was sourced from [7] and adapted to the datasets. Additional modifications were made to integrate the model with this repository, including functions for saving and loading the model, as well as storing generated images. For more information on the required parameters, run `python train.py --helpPatchGAN`.
 
 
 _References:_
@@ -75,7 +75,7 @@ _References:_
 
 ### QC-GAN
 
-Another promising hybrid quantum-classical GAN architecture is the QC-GAN [8]. Unlike the patch method, this architecture captures global features across the entire image. The generator combines a quantum circuit with a classical neural network layer, which performs the nonlinear operations and removes the need for ancillary qubits. As with previous models, the discriminator is classical, consisting of a fully connected neural network. For more information on the required parameters, run `python train.py --helpQCGAN`
+Another promising hybrid quantum-classical GAN architecture is the QC-GAN [8]. Unlike the patch method, this architecture captures global features across the entire image. The generator combines a quantum circuit with a classical neural network layer, which performs the nonlinear operations and removes the need for ancillary qubits. As with previous models, the discriminator is classical, consisting of a fully connected neural network. For more information on the required parameters, run `python train.py --helpQCGAN`.
 
 _References:_
 
@@ -86,7 +86,7 @@ _References:_
 
 Building on the Quantum PatchGAN approach, an improved version was proposed in [9]. This architecture enhances convergence by minimizing the Wasserstein distance during training. Like PatchGAN, it utilizes multiple sub-generators; however, the quantum circuit differs in structure. The discriminator is a classical fully connected network with three hidden layers and outputs a real value that approximates the Wasserstein distance, which is then used to optimize the model. 
 
-The code for this model was sourced from [10] and adapted to integrate seamlessly with this repository. For more information on the required parameters, run `python train.py --helpPQWGAN`
+The code for this model was sourced from [10] and adapted to integrate seamlessly with this repository. For more information on the required parameters, run `python train.py --helpPQWGAN`.
 
 _References:_
 
@@ -97,7 +97,7 @@ _References:_
 ## Classical GANs
 ### GAN
 
-For the classical counterparts of the models, a traditional GAN was trained. This architecture consists of fully connected neural networks with three hidden layers for both the generator and the discriminator. The code was sourced from [11] and modified to support training on different datasets, enable model saving and loading, and ensure compatibility with this repository.
+For the classical counterparts of the models, a traditional GAN was trained. This architecture consists of fully connected neural networks with three hidden layers for both the generator and the discriminator. The code was sourced from [11] and modified to support training on different datasets, enable model saving and loading, and ensure compatibility with this repository. Additionally, for more information about the required parameters, run `python train.py --helpGAN`.
 
 
 _References:_
@@ -106,7 +106,7 @@ _References:_
 
 ### WGAN
 
-To compare the results of PQWGAN with its classical counterpart, the WGAN-GP architecture was trained. Proposed by [12] and serving as the basis for PQWGAN, WGAN-GP aims to enhance training stability by incorporating a gradient penalty for the critic. The code was sourced from [13] and modified to support training on various datasets, enable model saving and loading, and ensure compatibility with the repository.
+To compare the results of PQWGAN with its classical counterpart, the WGAN-GP architecture was trained. Proposed by [12] and serving as the basis for PQWGAN, WGAN-GP aims to enhance training stability by incorporating a gradient penalty for the critic. The code was sourced from [13] and modified to support training on various datasets, enable model saving and loading, and ensure compatibility with the repository. Additionally, for more information about the required parameters, run `python train.py --helpWGAN`.
 
 _References:_
 
@@ -119,7 +119,7 @@ _References:_
 
 Q-Dense is another architecture utilized in this project. It is a quantum denoising model introduced in [14], where dense quantum circuits are trained to perform denoising. These circuits are termed "dense" due to the significant entanglement they create between qubits, making them somewhat analogous to fully connected networks in classical machine learning. Building on this architecture, the authors also proposed a guided version of the model that incorporates image class embeddings to enhance training. In this improved model, an additional ancilla qubit encodes the label information.
 
-The code for Q-Dense was adapted from [15] with modifications to support training on different datasets, enable model saving and loading, and ensure compatibility with this repository. For details on required parameters, run `python train.py --help QDense / --help QDensedi`
+The code for Q-Dense was adapted from [15] with modifications to support training on different datasets, enable model saving and loading, and ensure compatibility with this repository. For details on required parameters, run `python train.py --help QDense / --help QDensedi`.
 
 _References:_
 
@@ -131,7 +131,7 @@ _References:_
 ## Classical Denoising Diffusion Models
 ### Denoising Diffusion Probabilistic architecture
 
-Finally, to compare the results of the denoising diffusion models, a classical counterpart was used using a U-Net architecture for the denoising process. The code was sourced from [16] and modified to integrate with this repository, support training on various datasets, and enable model saving and loading
+Finally, to compare the results of the denoising diffusion models, a classical counterpart was used using a U-Net architecture for the denoising process. The code was sourced from [16] and modified to integrate with this repository, support training on various datasets, and enable model saving and loading. Additionally, for more information about the required parameters, run `python train.py --helpDiff`.
 
 _References:_
 

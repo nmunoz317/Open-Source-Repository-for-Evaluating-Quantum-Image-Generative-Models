@@ -36,7 +36,7 @@ This project focuses on the use of biomedical images. To this end, two datasets 
 
 This dataset consists of 17,092 images of blood cells across eight different groups. The images were captured using a Blood Cell Microscope and underwent preprocessing to achieve a resolution of 3×28×28. This dataset was selected for its low-resolution biomedical images, which are well-suited for quantum generative models in the Noisy Intermediate-Scale Quantum (NISQ) era.
 
-To train the models with this dataset, you need to specify the path to the .npz file that contains the data. Additionally, for more information about the required parameters, run `python train.py --helpblood'
+To train the models with this dataset, you need to specify the path to the .npz file that contains the data. Additionally, for more information about the required parameters, run `python train.py --helpblood`
 
 _References:_
 

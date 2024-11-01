@@ -3,21 +3,22 @@
 **This repository focuses on benchmarking quantum generative models in the field of quantum machine learning, specifically for image generation. While previous projects have primarily addressed simple image distributions, our work aims to evaluate how these models perform across different image resolutions. We provide an open-source codebase that includes several quantum generative architectures. This repository is open-access, encouraging individuals to contribute and enhance our understanding of the current capabilities of these models.**
 
 ## Table of Contents
-  * [Usage](#Usage)
-  * [Datasets](#Datasets)
-    + [Blood MedMNIST](blood)
-    + [BraTS dataset](brats)
-  * [Quantum GANs](#Quantum-GANs)
-    + [Quantum Patch GAN](#qpatchagan)
-    + [QC-GAN](#qcgan)
-    + [PQWGAN](#PQWGAN)
-  * [Classical GANs](#Classicgans)
-    + [GAN](#GAN)
-    + [WGAN](#WGAN)
-  * [Quantum Denoising Diffusion Models](#Qdeno)
-    + [ Q-Dense and Q-Dense Directed](#qdense)
-  * [Classical Denoising Diffusion Models](#Deno)
-    + [Denoising Diffusion Probabilistic architecture](#DDPM)
+  * [Usage](#usage)
+  * [Datasets](#datasets)
+    * [Blood MedMNIST](#blood-medmnist)
+    * [BraTS dataset](#brats-dataset)
+  * [Quantum GANs](#quantum-gans)
+    * [Quantum Patch GAN](#quantum-patch-gan)
+    * [QC-GAN](#qc-gan)
+    * [PQWGAN](#pqwgan)
+  * [Classical GANs](#classical-gans)
+    * [GAN](#gan)
+    * [WGAN](#wgan)
+  * [Quantum Denoising Diffusion Models](#quantum-denoising-diffusion-models)
+    * [Q-Dense and Q-Dense Directed](#q-dense-and-q-dense-directed)
+  * [Classical Denoising Diffusion Models](#classical-denoising-diffusion-models)
+    * [Denoising Diffusion Probabilistic Architecture](#denoising-diffusion-probabilistic-architecture)
+
 
 
 ## Usage

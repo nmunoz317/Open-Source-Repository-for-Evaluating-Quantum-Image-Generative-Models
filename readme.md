@@ -120,7 +120,9 @@ _References:_
 
 Q-Dense is another architecture utilized in this project. It is a quantum denoising model introduced in [14], where dense quantum circuits are trained to perform denoising. These circuits are termed "dense" due to the significant entanglement they create between qubits, making them somewhat analogous to fully connected networks in classical machine learning. Building on this architecture, the authors also proposed a guided version of the model that incorporates image class embeddings to enhance training. In this improved model, an additional ancilla qubit encodes the label information.
 
-The code for Q-Dense was adapted from [15] with modifications to support training on different datasets, enable model saving and loading, and ensure compatibility with this repository. For details on required parameters, run `python train.py --help QDense / --help QDensedi`.
+The Q-Dense code was adapted from [15], with modifications to support training on various datasets, enable model saving and loading, and ensure compatibility with this repository. This adaptation is based on software originally created by Michael Kölle and is licensed under the MIT License: Copyright (c) 2024 Michael Kölle
+
+For details on required parameters, run `python train.py --help QDense / --help QDensedi`.
 
 _References:_
 

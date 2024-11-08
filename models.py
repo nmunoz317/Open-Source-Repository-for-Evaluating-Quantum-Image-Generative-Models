@@ -387,7 +387,9 @@ class WGAN():
 
 """
     Implementation of the Q-Dense and Q-Dense Directed architectures [1]. The code was extracted from [2] and has been slightly modified.
-
+    
+    Based on software copyrighted by Michael Kölle, licensed under the MIT License.
+    
     [1] Michael Kölle et al. “Quantum Denoising Diffusion Models”. In: arXiv preprint arXiv:2401.07049 (2024).
 
     [2] Michaelkoelle. GitHub - michaelkoelle/quantum-diffusion: Quantum Denoising Diffusion Models. url: https://github.com/michaelkoelle/quantum-diffusion.

@@ -12,6 +12,11 @@ import pennylane as qml
 import tqdm
 import qw_map
 
+"""
+MIT License
+
+Copyright (c) 2024 Michael Kölle
+"""
 
 class PatchGAN():
     """

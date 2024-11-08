@@ -18,7 +18,11 @@ from torchvision.transforms import Compose, ToTensor, Lambda
 from datasets import BloodDataset, BrainDataset
 from models import PatchGAN, QCGAN, PQWGAN, GAN, WGAN, Diffusion, QDenseUndirected, QDenseDirected, MyDDPM, MyUNet
 
+"""
+MIT License
 
+Copyright (c) 2024 Michael Kölle
+"""
 
 def compute_gradient_penalty(critic, real_samples, fake_samples, device, classic=False):
     """Calculates the gradient penalty loss for WGAN GP"""
@@ -213,6 +217,9 @@ def trainingGANs(model, discriminator, generator, dataloader, device, batch_size
 
 # Function for training different Diffusion models (classical and quantum)
 def trainDiff(model, diff, out_dir, lr, n_epochs, dataloader, tau, image_shape, device, save_interval):
+    """
+    Based on software copyrighted by Michael Kölle, licensed under the MIT License.
+    """
     # Define the path for saving checkpoints
     checkpoint_path=out_dir+'checkpoint.pth'
     # Initialize variables

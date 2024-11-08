@@ -29,7 +29,7 @@ class PatchGAN():
     def __init__(self, image_shape, n_generators, n_qubits, n_ancillas, n_layers, device, q_delta=1):
         self.discriminator = self.Discriminator(image_shape)
         self.device=device
-        self.generator = self.Generator(n_generators, n_qubits, n_ancillas, n_layers, q_delta)
+        self.generator = self.Generator(n_generators, n_qubits, n_ancillas, n_layers, q_delta, device)
 
     class Discriminator(nn.Module):
         def __init__(self, image_shape):
@@ -50,9 +50,9 @@ class PatchGAN():
             return self.model(x)
 
     class Generator(nn.Module):
-        def __init__(self, n_generators, n_qubits, n_ancillas, n_layers, q_delta):
+        def __init__(self, n_generators, n_qubits, n_ancillas, n_layers, q_delta, device):
             super().__init__()
-
+            self.device=device
             self.q_params = nn.ParameterList(
                 [
                     nn.Parameter(q_delta * torch.rand(n_layers * n_qubits), requires_grad=True)
@@ -110,7 +110,7 @@ class QCGAN():
     def __init__(self, image_shape, n_qubits, n_layers, q_delta=1, device='cpu'):
         self.discriminator = self.Discriminator(image_shape)
         self.device=device
-        self.generator = self.Generator(n_layers, n_qubits, image_shape, q_delta)
+        self.generator = self.Generator(n_layers, n_qubits, image_shape, q_delta, device)
     class Discriminator(nn.Module):
             def __init__(self, image_shape):
                 super().__init__()
@@ -127,10 +127,10 @@ class QCGAN():
                 return self.model(x)
     class Generator(nn.Module):
 
-        def __init__(self, layers, n_data_qubits, image_shape, q_delta=1):
+        def __init__(self, layers, n_data_qubits, image_shape, q_delta=1, device='cuda'):
 
             super().__init__()
-
+            self.device=device
             self.q_params = nn.Parameter(q_delta * torch.rand(layers * n_data_qubits*3), requires_grad=True)
             self.q_dev = qml.device("default.qubit", wires=n_data_qubits)
             self.qnode=qml.QNode(self.quantum_circuit, self.q_dev, interface="torch", diff_method="parameter-shift")
@@ -190,14 +190,14 @@ class PQWGAN():
     def __init__(self, image_size, channels, n_generators, n_qubits, n_ancillas, n_layers, patch_shape, device):
         self.image_shape = (channels, image_size[0], image_size[1])
         self.device=device
-        self.discriminator = self.Discriminator(self.image_shape)
-        self.generator = self.Generator(n_generators, n_qubits, n_ancillas, n_layers, self.image_shape, patch_shape)
+        self.discriminator = self.Discriminator(self.image_shape, device)
+        self.generator = self.Generator(n_generators, n_qubits, n_ancillas, n_layers, self.image_shape, patch_shape, device)
 
     class Discriminator(nn.Module):
-        def __init__(self, image_shape):
+        def __init__(self, image_shape, device):
             super().__init__()
             self.image_shape = image_shape
-
+            self.device=device
             self.fc1 = nn.Linear(int(np.prod(self.image_shape)), 512)
             self.fc2 = nn.Linear(512, 256)
             self.fc3 = nn.Linear(256, 1)
@@ -209,9 +209,10 @@ class PQWGAN():
             return self.fc3(x)
 
     class Generator(nn.Module):
-        def __init__(self, n_generators, n_qubits, n_ancillas, n_layers, image_shape, patch_shape):
+        def __init__(self, n_generators, n_qubits, n_ancillas, n_layers, image_shape, patch_shape, device):
             super().__init__()
             self.n_generators = n_generators
+            self.device=device
             self.n_qubits = n_qubits
             self.n_ancillas = n_ancillas
             self.n_layers = n_layers

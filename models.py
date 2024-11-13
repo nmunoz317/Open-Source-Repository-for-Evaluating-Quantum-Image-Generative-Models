@@ -387,6 +387,11 @@ class WGAN():
 
 
 """
+    
+    MIT License
+    
+    Copyright (c) 2024 Michael Kölle
+
     Implementation of the Q-Dense and Q-Dense Directed architectures [1]. The code was extracted from [2] and has been slightly modified.
     
     Based on software copyrighted by Michael Kölle, licensed under the MIT License.

@@ -1,5 +1,5 @@
 # Open-Source Repository for Evaluating Quantum Image Generative Models
-aaaa
+
 **This repository focuses on benchmarking quantum generative models in the field of quantum machine learning, specifically for image generation. While previous projects have primarily addressed simple image distributions, our work aims to evaluate how these models perform across different image resolutions. We provide an open-source codebase that includes several quantum generative architectures. This repository is open-access, encouraging individuals to contribute and enhance our understanding of the current capabilities of these models.**
 
 ## Table of Contents

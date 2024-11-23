@@ -14,8 +14,8 @@ import torchvision.transforms
 from torch.utils.data import DataLoader
 from torchvision.utils import save_image
 
-from .datasets import BloodDataset, BrainDataset
-from .models import PatchGAN, QCGAN, PQWGAN, GAN, WGAN, Diffusion, QDenseUndirected, QDenseDirected, MyDDPM, MyUNet
+from src.datasets import BloodDataset, BrainDataset
+from src.models import PatchGAN, QCGAN, PQWGAN, GAN, WGAN, Diffusion, QDenseUndirected, QDenseDirected, MyDDPM, MyUNet
 
 
 # Function for training different GAN models (classical and quantum)
@@ -295,33 +295,36 @@ def trainDiff(model, diff, out_dir, lr, n_epochs, dataloader, tau, image_shape, 
         counter=0
 
 def parse_transform(transform_str):
-    # Remove the 'torchvision.transforms.' prefix if it exists
-    transform_str = transform_str.replace("torchvision.transforms.", "")
-    # Split the input string by the '(' character
-    parts = transform_str.split('(')
-    transform_name = parts[0]
-    
-    # Check if there are parameters in the transformation string
-    if len(parts) > 1:
-        params_str = parts[1][:-1]
-        print(f"Parameters string: {params_str}")
-        params = tuple(map(float, re.findall(r'[0-9.]+', params_str)))
-    else:
-        params = ()
+    if transform_str!=None:
+      # Remove the 'torchvision.transforms.' prefix if it exists
+      transform_str = transform_str.replace("torchvision.transforms.", "")
+      # Split the input string by the '(' character
+      parts = transform_str.split('(')
+      transform_name = parts[0]
+      
+      # Check if there are parameters in the transformation string
+      if len(parts) > 1:
+          params_str = parts[1][:-1]
+          print(f"Parameters string: {params_str}")
+          params = tuple(map(float, re.findall(r'[0-9.]+', params_str)))
+      else:
+          params = ()
 
-    # Create the corresponding transformation
-    if transform_name == 'CenterCrop':
-        return torchvision.transforms.CenterCrop(*params)
-    elif transform_name == 'Grayscale':
-        return torchvision.transforms.Grayscale(*params)
-    elif transform_name == 'RandomHorizontalFlip':
-        return torchvision.transforms.RandomHorizontalFlip(*params)
-    elif transform_name == 'RandomVerticalFlip':
-        return torchvision.transforms.RandomVerticalFlip(*params)
-    elif transform_name == 'ColorJitter':
-        return torchvision.transforms.ColorJitter(*params)
+      # Create the corresponding transformation
+      if transform_name == 'CenterCrop':
+          return torchvision.transforms.CenterCrop(*params)
+      elif transform_name == 'Grayscale':
+          return torchvision.transforms.Grayscale(*params)
+      elif transform_name == 'RandomHorizontalFlip':
+          return torchvision.transforms.RandomHorizontalFlip(*params)
+      elif transform_name == 'RandomVerticalFlip':
+          return torchvision.transforms.RandomVerticalFlip(*params)
+      elif transform_name == 'ColorJitter':
+          return torchvision.transforms.ColorJitter(*params)
+      else:
+          raise ValueError(f"Unknown transformation: {transform_name}")
     else:
-        raise ValueError(f"Unknown transformation: {transform_name}")
+      return None
 
 # Function that provides help information for the Blood MedMNIST dataset
 def parse_blood_help():

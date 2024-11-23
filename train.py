@@ -14,8 +14,8 @@ import torchvision.transforms
 from torch.utils.data import DataLoader
 from torchvision.utils import save_image
 
-from datasets import BloodDataset, BrainDataset
-from models import PatchGAN, QCGAN, PQWGAN, GAN, WGAN, Diffusion, QDenseUndirected, QDenseDirected, MyDDPM, MyUNet
+from .datasets import BloodDataset, BrainDataset
+from .models import PatchGAN, QCGAN, PQWGAN, GAN, WGAN, Diffusion, QDenseUndirected, QDenseDirected, MyDDPM, MyUNet
 
 
 # Function for training different GAN models (classical and quantum)

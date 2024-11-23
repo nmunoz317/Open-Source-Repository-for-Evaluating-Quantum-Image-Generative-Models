@@ -39,6 +39,8 @@ This dataset consists of 17,092 images of blood cells across eight different gro
 
 To train the models with this dataset, you need to specify the path to the .npz file that contains the data. Additionally, for more information about the required parameters, run `python train.py --helpblood`.
 
+Link to the dataset: [http://braintumorsegmentation.org/](https://medmnist.com/)
+
 _References:_
 
 [1] Jiancheng Yang, Rui Shi, Donglai Wei, Zequan Liu, Lin Zhao, Bilian Ke, Hanspeter Pfister, Bingbing Ni. Yang, Jiancheng, et al. "MedMNIST v2-A large-scale lightweight benchmark for 2D and 3D biomedical image classification." Scientific Data, 2023.
@@ -50,6 +52,8 @@ _References:_
 This dataset contains 750 brain volumes with four types of MRI scans: Fluid-attenuated inversion recovery (FLAIR), T1, T1 with gadolinium contrast, and T2. Each volume is composed of 155 slices, each at a resolution of 240×240. This dataset was chosen for its more complex images, which are valuable for studying how models perform with higher-resolution data.
 
 To train the models with this dataset, specify the path to the folder containing the NIfTI files. For more information on the required parameters, run `python train.py --helpbrain`.
+
+Link to the dataset: http://braintumorsegmentation.org/
 
 _References:_
 

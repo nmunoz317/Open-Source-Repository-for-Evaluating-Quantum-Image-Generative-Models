@@ -134,7 +134,7 @@ _References:_
 ## Classical Denoising Diffusion Models
 ### Denoising Diffusion Probabilistic architecture
 
-Finally, to compare the results of the denoising diffusion models, a classical counterpart was used using a U-Net architecture for the denoising process. The code was sourced from [16] and modified to integrate with this repository, support training on various datasets, and enable model saving and loading. Additionally, for more information about the required parameters, run `python train.py --helpDiff`.
+Finally, to compare the results of the denoising diffusion models, a classical counterpart was used using a U-Net based architecture for the denoising process. The code was sourced from [16] and modified to integrate with this repository, support training on various datasets, and enable model saving and loading. Additionally, for more information about the required parameters, run `python train.py --helpDiff`.
 
 _References:_
 

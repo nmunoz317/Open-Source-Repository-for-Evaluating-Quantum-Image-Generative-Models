@@ -39,7 +39,7 @@ This dataset consists of 17,092 images of blood cells across eight different gro
 
 To train the models with this dataset, you need to specify the path to the .npz file that contains the data. Additionally, for more information about the required parameters, run `python train.py --helpblood`.
 
-Link to the dataset: [http://braintumorsegmentation.org/](https://medmnist.com/)
+[Link to the dataset](https://medmnist.com/)
 
 _References:_
 
@@ -53,7 +53,7 @@ This dataset contains 750 brain volumes with four types of MRI scans: Fluid-atte
 
 To train the models with this dataset, specify the path to the folder containing the NIfTI files. For more information on the required parameters, run `python train.py --helpbrain`.
 
-Link to the dataset: http://braintumorsegmentation.org/
+[Link to the dataset](http://braintumorsegmentation.org/)
 
 _References:_
 

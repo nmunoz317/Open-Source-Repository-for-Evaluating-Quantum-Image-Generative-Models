@@ -16,8 +16,6 @@
     * [WGAN](#wgan)
   * [Quantum Denoising Diffusion Models](#quantum-denoising-diffusion-models)
     * [Q-Dense and Q-Dense Directed](#q-dense-and-q-dense-directed)
-  * [Classical Denoising Diffusion Models](#classical-denoising-diffusion-models)
-    * [Denoising Diffusion Probabilistic Architecture](#denoising-diffusion-probabilistic-architecture)
 
 
 
@@ -134,13 +132,4 @@ _References:_
 
 [15] Michaelkoelle. GitHub - michaelkoelle/quantum-diffusion: Quantum Denoising Diffusion Models. url: https://github.com/michaelkoelle/quantum-diffusion.
 
-
-## Classical Denoising Diffusion Models
-### Denoising Diffusion Probabilistic architecture
-
-Finally, to compare the results of the denoising diffusion models, a classical counterpart was used using a U-Net based architecture for the denoising process. The code was sourced from [16] and modified to integrate with this repository, support training on various datasets, and enable model saving and loading. Additionally, for more information about the required parameters, run `python train.py --helpDiff`.
-
-_References:_
-
-[16] Brian Pulfer. “Generating images with DDPMs: A PyTorch Implementation”. In: (Mar. 2023). url: https://medium.com/@brianpulfer/enerating-images-with-ddpms-a-pytorch-implementation-cef5a2ba8cb1.
 

@@ -19,7 +19,7 @@ from src.models import PatchGAN, QCGAN, PQWGAN, GAN, WGAN, Diffusion, QDenseUndi
 
 
 # Function for training different GAN models (classical and quantum)
-def trainingGANs(model, discriminator, generator, dataloader, device, batch_size, lr_G, lr_D, image_size,out_dir, n_data_qubits=0, save_interval=5, optimizer='SGD', n_epochs=50, lambda_gp=10):
+def trainingGANs(model, discriminator, generator, dataloader, device, batch_size, lr_G, lr_D, image_size,out_dir, n_data_qubits=0, save_interval=5, optimizer='SGD', n_epochs=50, lambda_gp=10, b1=0, b2=0.9):
     # Generator and discriminator initialization
     generator = generator.to(device)
     discriminator = discriminator.to(device)
@@ -33,8 +33,8 @@ def trainingGANs(model, discriminator, generator, dataloader, device, batch_size
         optD = optim.SGD(discriminator.parameters(), lr=lr_D)
         optG = optim.SGD(generator.parameters(), lr=lr_G)
     elif optimizer=='Adam':
-        optD = optim.Adam(discriminator.parameters(), lr=lr_D)
-        optG = optim.Adam(generator.parameters(), lr=lr_G)
+        optD = optim.Adam(discriminator.parameters(), lr=lr_D, betas=(b1, b2))
+        optG = optim.Adam(generator.parameters(), lr=lr_G, betas=(b1, b2))
     # Check if a saved checkpoint exists; if so, load it to resume training from that point
     if checkpoint_path is not None and os.path.exists(checkpoint_path):
         checkpoint = torch.load(checkpoint_path)
@@ -118,7 +118,7 @@ def trainingGANs(model, discriminator, generator, dataloader, device, batch_size
 
                 # Training the generator
                 if model=='PQWGAN':
-                    noise = torch.rand(batch_size, n_data_qubits, device=device)
+                    # noise = torch.rand(batch_size, n_data_qubits, device=device)
                     fake_data = generator(noise).to(device)
                     optG.zero_grad()
                     outD_fake = discriminator(fake_data).to(device)
@@ -223,7 +223,8 @@ def trainDiff(model, diff, out_dir, lr, n_epochs, dataloader, tau, image_shape, 
     counter=0
     saved_initial=False
     checkpoint_path=out_dir+'checkpoint.pth'
-    # Optimisers initialization
+    diff.train()
+    # Optimiser initialization
     opt = torch.optim.Adam(diff.parameters(), lr=lr)
     # Check if a saved checkpoint exists; if so, load it to resume training from that point
     if checkpoint_path is not None and os.path.exists(checkpoint_path):
@@ -238,8 +239,7 @@ def trainDiff(model, diff, out_dir, lr, n_epochs, dataloader, tau, image_shape, 
         print("No checkpoint found. Starting from scratch.")
 
 
-    # Initialize the first random input tensor
-    first_x = torch.rand(15, 1, image_shape[0], image_shape[1]) * 0.5 + 0.75
+
     # Loop over epochs for training
     for epoch in range(start_epoch, n_epochs):
         epoch_loss = 0.0
@@ -396,6 +396,8 @@ def parse_PQWGAN():
     print("-opt, --optimizer, type=str: Optimize type.")
     print("-o, --out_dir, type=str: Output directory.")
     print("-lgp, --lambda_gp, type=int: Lambda gradient penalty (default 10).")
+    print("-b1, --b1, type=float: Beta 1 for optimizer.")
+    print("-b2, --b2, type=float: Beta 2 for optimizer.")
     print("Model references:")
     print("[1] Shu Lok Tsang et al. “Hybrid quantum-classical generative adversarial network for high resolution image generation”. In: IEEE Transactions on Quantum Engineering (2023).")
     print("[2] Jasontslxd. GitHub - jasontslxd/PQWGAN: Code to run and test the PQWGAN framework. url: https://github.com/jasontslxd/PQWGAN.")
@@ -507,6 +509,8 @@ if __name__ == "__main__":
     parser.add_argument("-qd", "--q_delta", help="Q delta", type=int, default=1)
     parser.add_argument("-ch", "--channels", help="Number of channels of the images", type=int, default=1)
     parser.add_argument("-pshape",'--patch_shape', help="Patch shape", type=int, nargs=2)
+    parser.add_argument("-b1",'--b1', help="Beta 1 for optimizer", type=float, default=0)
+    parser.add_argument("-b2",'--b2', help="Beta 2 for optimizer", type=float, default=0.9)
 
     # Arguments for diffusion models
     parser.add_argument("-lr", "--lr", help="Learning rate", type=float)
@@ -589,7 +593,7 @@ if __name__ == "__main__":
             generator=model_.generator.to(args.device)
             discriminator=model_.discriminator.to(args.device)
         # Train the selected GAN model
-        trainingGANs(args.model, discriminator, generator, dataloader, args.device, args.batch_size, args.lr_G, args.lr_D, args.img_shape,args.out_dir, args.n_data_qubits, args.save_interval, args.optimizer, args.n_epochs, args.lambda_gp)
+        trainingGANs(args.model, discriminator, generator, dataloader, args.device, args.batch_size, args.lr_G, args.lr_D, args.img_shape,args.out_dir, args.n_data_qubits, args.save_interval, args.optimizer, args.n_epochs, args.lambda_gp, b1 = args.b1, b2 = args.b2)
     if args.model in diffusion:
         if args.model=='Q-Dense':
             net=QDenseUndirected(args.layers, args.img_shape)

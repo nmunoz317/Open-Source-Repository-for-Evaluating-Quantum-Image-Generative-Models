@@ -137,42 +137,31 @@ class QCGAN():
             self.image_shape=image_shape
         def forward(self, x):
             images = []
-
             for elem in x:
                 q_out = self.partial_measure(elem, self.q_params).float().unsqueeze(0)
                 images.append(q_out)
-
             images = torch.cat(images, dim=0).to(self.device)
-
-      
             linear_output = self.linear(images)
-
-            
             output = self.sigmoid(linear_output)
-
             return output
 
         def partial_measure(self,noise, weights):
             probs = self.qnode(noise, weights).float()
             quantum_output = probs / torch.abs(probs).max()
-
             return quantum_output
+        
         def quantum_circuit(self,noise, weights):
-
           weights = weights.reshape(self.layers, self.n_data_qubits,3)
 
           for i in range(self.n_data_qubits):
               qml.RY(noise[i], wires=i)
 
           for i in range(self.layers):
-
               for y in range(self.n_data_qubits):
                   qml.RX(weights[i][y][0], wires=y)
                   qml.RZ(weights[i][y][1], wires=y)
-
-              
-              for y in range(self.n_data_qubits - 1):
-                  qml.CRX(weights[i, y, 2], wires=[y, y + 1])
+              for z in range(self.n_data_qubits - 1):
+                  qml.CRX(weights[i, z, 2], wires=[z, z + 1])
               qml.CRX(weights[i, self.n_data_qubits - 1, 2], wires=[(self.n_data_qubits-1), 0])
 
           return qml.probs(wires=list(range(self.n_data_qubits)))
@@ -384,14 +373,12 @@ class WGAN():
             return validity
 
 
-
 """
-    
     MIT License
     
     Copyright (c) 2024 Michael Kölle
 
-    Implementation of the Q-Dense and Q-Dense Directed architectures [1]. The source code was extracted from [2].
+    Implementation of the Q-Dense and Q-Dense Directed architectures [1]. The code was extracted from [2] and has been slightly modified.
     
     Based on software copyrighted by Michael Kölle, licensed under the MIT License.
     
@@ -578,7 +565,7 @@ class QDenseUndirected(torch.nn.Module):
         self.qdepth = qdepth
         if isinstance(shape, int):
             shape = (shape, shape)
-        self.width, self.height = shape[0],shape[1]
+        self.width, self.height = shape[0], shape[1]
         self.pixels = self.width * self.height
         self.wires = math.ceil(math.log2(self.width * self.height))
         self.qdev = qml.device("default.qubit", wires=self.wires)
@@ -704,7 +691,6 @@ class QDenseDirected(QDense2Undirected):
 
     def save_name(self) -> str:
         return f"qdense_directed_d{self.qdepth}_w{self.width}_h{self.height}"
-
 
 
 

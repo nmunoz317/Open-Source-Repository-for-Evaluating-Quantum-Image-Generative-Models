@@ -253,8 +253,13 @@ def trainDiff(model, diff, out_dir, lr, n_epochs, dataloader, tau, image_shape, 
             # Perform training if the current iteration is valid
             if i > counter or counter==0:
                 opt.zero_grad()
-                x=x.view(x.shape[0],-1)
-                y=y.squeeze(1)
+                
+                y = y.squeeze(1)
+                y = y.to(torch.float64)
+                x = x * 0.5 + 0.5
+                x = x.to(torch.float64)
+                x = x.flatten(start_dim=1)
+                
                 batch_loss, _ = diff(x=x, y=y, T=tau, verbose=True)
                 epoch_loss += batch_loss.mean()
                 opt.step()
@@ -573,7 +578,7 @@ if __name__ == "__main__":
             generator=model_.generator.to(args.device)
             discriminator=model_.discriminator.to(args.device)
         elif args.model=='QC-GAN':
-            model_=QCGAN(args.img_shape, args.n_data_qubits, args.layers, args.q_delta)
+            model_=QCGAN(args.img_shape, args.n_data_qubits, args.layers, args.q_delta, args.device)
             # Define the generator and discriminator
             generator=model_.generator.to(args.device)
             discriminator=model_.discriminator.to(args.device)
@@ -603,6 +608,7 @@ if __name__ == "__main__":
                 noise_f=add_normal_noise_multiple,
                 prediction_goal='data',
                 directed=False,
+                device = args.device,
                 loss=torch.nn.MSELoss(),
             ).to(args.device)
         elif args.model=='Q-Dense Directed':
@@ -613,6 +619,7 @@ if __name__ == "__main__":
                 noise_f=add_normal_noise_multiple,
                 prediction_goal='data',
                 directed=True,
+                device = args.device,
                 loss=torch.nn.MSELoss(),
             ).to(args.device)
         # Train the selected diffusion model

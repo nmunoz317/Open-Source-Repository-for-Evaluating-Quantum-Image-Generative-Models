@@ -396,9 +396,11 @@ class Diffusion(torch.nn.Module):
         loss: torch.nn.Module = torch.nn.MSELoss(reduction="none"),
         directed=False,
         on_states=False,
+        device = 'cpu',
         skip_name_test=False,
     ) -> None:
         super().__init__()
+        self.device = device
         self.net = net
         if not skip_name_test:
             assert (
@@ -428,6 +430,7 @@ class Diffusion(torch.nn.Module):
     def forward(
         self, x: typing.Union[torch.Tensor, None], **kwargs
     ) -> typing.Union[torch.Tensor, None]:
+        x = x.to(self.device)
         x = typing.cast(torch.Tensor, x)
         return self.run_training_step_data(x, **kwargs)
             
@@ -441,29 +444,31 @@ class Diffusion(torch.nn.Module):
         else:
             if "y" in kwargs and kwargs["y"] is not None:
                 warnings.warn("y is not used because the model is not directed")
-        whole_noisy = self.add_noise(x, tau=T + 1, decay_mod=3.0)
+        whole_noisy = self.add_noise(x, tau=T + 1, decay_mod=3.0).to(self.device)
         whole_noisy = einops.rearrange(
             whole_noisy, "(batch tau) pixels -> batch tau pixels", tau=T + 1
-        )
+        ).to(self.device)
         batches_noisy = whole_noisy[:, 1:, :]
+        batches_noisy = batches_noisy.to(self.device)
         batches_clean = whole_noisy[:, :-1, :]
+        batches_clean = batches_clean.to(self.device)
         batches_noisy = einops.rearrange(
             batches_noisy,
             "batch tau (width height) -> (batch tau) 1 width height",
             width=self.width,
             height=self.height,
-        )
+        ).to(self.device)
         batches_clean = einops.rearrange(
             batches_clean,
             "batch tau (width height) -> (batch tau) 1 width height",
             width=self.width,
             height=self.height,
-        )
+        ).to(self.device)
         if self.directed:
-            batches_reconstructed = self.net.forward(x=batches_noisy, y=labels) 
+            batches_reconstructed = self.net.forward(x=batches_noisy, y=labels).to(self.device)
         else:
-            batches_reconstructed = self.net.forward(x=batches_noisy)
-        batch_loss = self.loss(batches_reconstructed, batches_clean)
+            batches_reconstructed = self.net.forward(x=batches_noisy).to(self.device)
+        batch_loss = self.loss(batches_reconstructed, batches_clean).to(self.device)
         batch_loss_mean = batch_loss.mean()
         batch_loss_mean.backward()
         verbose = kwargs.get("verbose", False)
@@ -485,32 +490,32 @@ class Diffusion(torch.nn.Module):
     ) -> torch.Tensor:
         """ " Samples from the model for n_iters iterations."""
         if first_x is None:
-            first_x = torch.rand((10, 1, self.width, self.height))
+            first_x = torch.rand((10, 1, self.width, self.height)).to(self.device)
         if self.on_states:
             return self._sample_on_states(n_iters, first_x, only_last, labels=labels)
         if labels is None and self.directed:
             labels = torch.zeros((first_x.shape[0], 1))
         if labels is not None and not self.directed:
             warnings.warn("labels are not used because the model is not directed")
-        outp = [first_x]
+        outp = [first_x.to(self.device)]
         if show_progress:
             iters = tqdm.tqdm(range(n_iters))
         else:
             iters = range(n_iters)
         with torch.no_grad():
-            x = first_x
+            x = first_x.to(self.device)
             for i in iters:
                 if self.directed:
-                    predicted = self.net(x, labels)
+                    predicted = self.net(x, labels).to(self.device)
                 else:
-                    predicted = self.net(x)
+                    predicted = self.net(x).to(self.device)
                 if self.prediction_goal == "data":
-                    x = predicted
+                    x = predicted.to(self.device)
                 else:
                     predicted = (predicted - 0.5) * 0.1 * noise_factor
                     new_x = x - predicted
-                    new_x = torch.clamp(new_x, 0, 1)
-                    x = new_x
+                    new_x = torch.clamp(new_x, 0, 1).to(self.device)
+                    x = new_x.to(self.device)
                 if i % step == 0:
                     outp.append(x)
         if only_last:

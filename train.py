@@ -2,9 +2,11 @@ import argparse
 import math
 import os
 import re
+import webbrowser
 import numpy as np
 import matplotlib.pyplot as plt
 from einops import rearrange, repeat
+from pathlib import Path
 
 import torch
 import torch.autograd as autograd
@@ -275,15 +277,13 @@ def trainDiff(model, diff, out_dir, lr, n_epochs, dataloader, tau, image_shape, 
                     # Save the test images generated at the current checkpoint
                     first_x = torch.rand(15, 1, image_shape[0], image_shape[1]) * 0.5 + 0.75
                     diff.eval()
-                    outp = diff.sample(first_x=first_x, n_iters=tau * 2, show_progress=False).view(15*(1+(2*tau)),1,image_shape[0],image_shape[1]).cpu().detach()
-                    # Normalize output images to the range [0, 1]
-                    outp = outp - outp.min() 
-                    outp = outp / (outp.max() - outp.min())
-                    max_value = torch.max(outp)
-                    min_value = torch.min(outp)
+                    outp = diff.sample(first_x=first_x, n_iters=tau * 2, show_progress=False)
+                    plt.imshow(outp.cpu(), cmap="gray")
+                    plt.axis("off")
+                    sp = Path(out_dir) / f'Epoch_{epoch}_Iteration_{i}.png'
+                    plt.savefig(sp)
+                    webbrowser.open(sp.absolute().as_uri())
                     
-                    print(f"Máximo: {max_value}, Mínimo: {min_value}") 
-                    save_image(outp, os.path.join(out_dir, 'Epoch_{}_Iteration_{}.png'.format(epoch, i)), nrow=15)
                 
                 # Print loss values for monitoring the training process
                 if i % 3 == 0:
